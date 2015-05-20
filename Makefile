@@ -2,13 +2,19 @@ CC = g++
 CFLAGS = -Wall
 LDFLAGS = -lm
 
-all : patient
+all : patient parking
 
-patient : patientCharge.o
-	$(CC) $(CFLAGS) patientCharge.o $(LDFLAGS) -o patient
+patient : PatientCharge.o
+	$(CC) $(CFLAGS) PatientCharge.o $(LDFLAGS) -o patient
 
-patientCharge.o : patientCharge.cpp
-	$(CC) $(CFLAGS) -c patientCharge.cpp
+PatientCharge.o : PatientCharge.cpp
+	$(CC) $(CFLAGS) -c PatientCharge.cpp
+
+parking : ParkingTicketSimulator.o
+	$(CC) $(CFLAGS) ParkingTicketSimulator.o $(LDFLAGS) -o parking
+
+ParkingTicketSimulator.o : ParkingTicketSimulator.cpp
+	$(CC) $(CFLAGS) -c ParkingTicketSimulator.cpp
 
 clean :
-	rm patient patientCharge.o
+	rm patient PatientCharge.o parking ParkingTicketSimulator.o

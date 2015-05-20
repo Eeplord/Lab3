@@ -1,7 +1,7 @@
 // CIS22B
 // Lab3
 // Cameron March
-// patientCharge.cpp
+// PatientCharge.cpp
 
 #include <iostream>
 
@@ -92,6 +92,8 @@ int main()
 				break;
 		}
 	}
+
+	return 0;
 }
 
 // Calculates charges for in-patients
