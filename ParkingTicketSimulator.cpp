@@ -78,41 +78,52 @@ class ParkingTicket
 {
 public:
 
-	ParkingTicket(const ParkedCar *car, const ParkingMeter *meter,
+	ParkingTicket(ParkedCar *car, ParkingMeter *meter,
 		std::string officerName, int officerBadgeNumber)
 	{
-		car_ = car;
-		meter_ = meter;
+		make_ = car->getMake();
+		model_ = car->getModel();
+		color_ = car->getColor();
+		licensePlate_ = car->getLicensePlate();
+		minutesParked_ = car->getMinutesParked();
+		parkingTime_ = meter->getParkingTime();
 		officerName_ = officerName;
 		officerBadgeNumber_ = officerBadgeNumber;
-	}
-
-	ParkedCar getCar()
-	{
-		return car_;
-	}
-
-	ParkingMeter getMeter()
-	{
-		return meter_;
 	}
 
 	friend std::ostream &operator<<(std::ostream &output,
 		const ParkingTicket &ticket)
 	{
-		output << "Car - " << std::endl;
-		output << "\tMake: " << ticket.getCar()->getMake();
-		output << "\tModel: " << ticket.getCar()->getModel();
-		output << "\tColor: " << ticket.getCar()->getColor();
-		output << "\tLicense Plate: " << ticket.getCar()->getLicensePlate() << std::endl;
+		output << "\nCAR" << std::endl;
+		output << "\tMake: " << ticket.make_ << std::endl;
+		output << "\tModel: " << ticket.model_ << std::endl;
+		output << "\tColor: " << ticket.color_ << std::endl;
+		output << "\tLicense Plate: " << ticket.licensePlate_ << std::endl;
+		output << "\tMinutes Parked: " << ticket.minutesParked_ << std::endl;
+
+		output << "\nMETER" << std::endl;
+		output << "\tMinutes Paid For: " << ticket.parkingTime_ << std::endl;
+
+		output << "\nOFFICER" << std::endl;
+		output << "\tName: " << ticket.officerName_ << std::endl;
+		output << "\tBadge Number: " << ticket.officerBadgeNumber_ << std::endl;
+
+		output << "\nFINE: " << std::endl;
+
+		return output;
 	}
 
 private:
 
-	const ParkedCar *car_;
-	const ParkingMeter *meter_;
+	std::string make_;
+	std::string model_;
+	std::string color_;
+	std::string licensePlate_;
 	std::string officerName_;
 	int officerBadgeNumber_;
+	int minutesParked_;
+	int parkingTime_;
+	int charge_;
 };
 
 class PoliceOfficer
@@ -154,6 +165,18 @@ int main()
 {
 
 	ParkedCar car("Honda", "Accord", "White", "8LHS035", 90);
+	ParkingMeter meter(30);
+	PoliceOfficer officer("Jones", 1337);
+
+	if(!officer.examineParking(car, meter))
+	{
+		ParkingTicket ticket = officer.issueTicket(&car, &meter);
+		std::cout << ticket;
+	}
+	else
+	{
+
+	}
 
 	return 0;
 }
