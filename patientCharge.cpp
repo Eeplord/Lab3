@@ -30,12 +30,14 @@ int main()
 	double days, rates, servicesCharge, medicationCharge, totalCharges;
 	bool quit = false;
 
+	// Introduction
+	std::cout << "Welcome to Patient Payment Handler." <<
+		" Enter (q) to quit." << std::endl;	
+
 	// Loop until user quits or finishes data entry
 	while(!quit)
 	{
-		// Introduction and asking if patient is 'in' or 'out'
-		std::cout << "Welcome to Patient Payment Handler." <<
-			" Enter (q) to quit." << std::endl;
+		// Ask if user is an in-patient or an out-patient
 		std::cout << "Are you an in-patient (i) or an out-patient (o)? ";
 		std::cin >> input;
 
@@ -51,7 +53,7 @@ int main()
 				// Calculating charges using overloaded function
 				totalCharges = calculateCharges(days, rates, servicesCharge,
 					medicationCharge);
-				
+
 				// Display charges to user
 				std::cout << "\nYour charges are: $" << totalCharges <<
 					"\n" << std::endl;
