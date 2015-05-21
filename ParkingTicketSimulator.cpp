@@ -89,28 +89,36 @@ public:
 		parkingTime_ = meter->getParkingTime();
 		officerName_ = officerName;
 		officerBadgeNumber_ = officerBadgeNumber;
+
+		int timeOver = minutesParked_ - parkingTime_;
+		int hours = 0;
+
+		if(timeOver % 60 > 0)
+		{
+			hours = 1;
+		}
+
+		hours += (timeOver / 60) - 1;
+		charge_ = 25 + 10 * hours;
 	}
 
-	friend std::ostream &operator<<(std::ostream &output,
-		const ParkingTicket &ticket)
+	void display()
 	{
-		output << "\nCAR" << std::endl;
-		output << "\tMake: " << ticket.make_ << std::endl;
-		output << "\tModel: " << ticket.model_ << std::endl;
-		output << "\tColor: " << ticket.color_ << std::endl;
-		output << "\tLicense Plate: " << ticket.licensePlate_ << std::endl;
-		output << "\tMinutes Parked: " << ticket.minutesParked_ << std::endl;
+		std::cout << "\nCAR" << std::endl;
+		std::cout << "\tMake: " << make_ << std::endl;
+		std::cout << "\tModel: " << model_ << std::endl;
+		std::cout << "\tColor: " << color_ << std::endl;
+		std::cout << "\tLicense Plate: " << licensePlate_ << std::endl;
+		std::cout << "\tMinutes Parked: " << minutesParked_ << std::endl;
 
-		output << "\nMETER" << std::endl;
-		output << "\tMinutes Paid For: " << ticket.parkingTime_ << std::endl;
+		std::cout << "\nMETER" << std::endl;
+		std::cout << "\tMinutes Paid For: " << parkingTime_ << std::endl;
 
-		output << "\nOFFICER" << std::endl;
-		output << "\tName: " << ticket.officerName_ << std::endl;
-		output << "\tBadge Number: " << ticket.officerBadgeNumber_ << std::endl;
+		std::cout << "\nOFFICER" << std::endl;
+		std::cout << "\tName: " << officerName_ << std::endl;
+		std::cout << "\tBadge Number: " << officerBadgeNumber_ << std::endl;
 
-		output << "\nFINE: " << std::endl;
-
-		return output;
+		std::cout << "\nFINE: $" << charge_ << "\n" << std::endl;
 	}
 
 private:
@@ -161,22 +169,47 @@ private:
 	int badgeNumber_;
 };
 
+void issueTicket(ParkedCar *car, ParkingMeter *meter, PoliceOfficer *officer);
+
 int main()
 {
+	std::cout << "Officer Jones spots a white Honda Accord at a parking" <<
+		" meter flashing the words 'Time Expired'. Checking his notes, he" <<
+		" see the car has been parked for 130 minutes. The policeman takes" <<
+		" out his notebook and pen.\n" << std::endl; 
 
-	ParkedCar car("Honda", "Accord", "White", "8LHS035", 90);
-	ParkingMeter meter(30);
-	PoliceOfficer officer("Jones", 1337);
+	ParkedCar car1("Honda", "Accord", "White", "8LHS035", 130);
+	ParkingMeter meter1(30);
+	PoliceOfficer officer1("Jones", 1337);
 
-	if(!officer.examineParking(car, meter))
+	issueTicket(&car1, &meter1, &officer1);
+
+	std::cout << "On the other side of town, a black Bugati Veyron" <<
+		" catches the eyes of Officer Martin. Checking the parking" <<
+		" meter, he sees there are still 20 minutes remaining, and" <<
+		" his notes tell him the car has been parked for 70 minutes." <<
+		" Officer Martin keeps his ticket pad in his pocket as he" <<
+		" admires the car.\n" << std::endl;
+
+	ParkedCar car2("Bugati", "Veyron", "Black", "2FST4ME", 50);
+	ParkingMeter meter2(70);
+	PoliceOfficer officer2("Martin", 4201);
+
+	issueTicket(&car2, &meter2, &officer2);
+
+	return 0;
+}
+
+void issueTicket(ParkedCar *car, ParkingMeter *meter, PoliceOfficer *officer)
+{
+	if(!officer->examineParking(*car, *meter))
 	{
-		ParkingTicket ticket = officer.issueTicket(&car, &meter);
-		std::cout << ticket;
+		std::cout << "Ticket Issued" << std::endl;
+		ParkingTicket ticket = officer->issueTicket(car, meter);
+		ticket.display();
 	}
 	else
 	{
-
+		std::cout << "No Ticket Issued" <<std::endl;
 	}
-
-	return 0;
 }
