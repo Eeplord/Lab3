@@ -162,8 +162,8 @@ int main()
 
 					// Show user distance after each gallon
 					std::cout << "\n\tOdometer: " << odometer.getMileage() <<
-						" mi Gas Tank: " << gauge.getAmount() << " gallons" <<
-						std::endl;
+						" mi | Gas Tank: " << gauge.getAmount() << 
+						" gallons" << std::endl;
 				}
 
 				break;
