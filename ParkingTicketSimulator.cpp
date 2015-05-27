@@ -170,12 +170,65 @@ private:
 };
 
 void issueTicket(ParkedCar *car, ParkingMeter *meter, PoliceOfficer *officer);
+void runSample();
+void runCustom();
 
 int main()
 {
+	char input;
+
+	std::cout << "Welcome to Parking Ticket Simulator.\n" << std::endl;
+	
+	do
+	{
+		std::cout << "[1] Sample\n" << "[2] Custom\n" << "[q] Quit" <<
+			std::endl; 
+
+		std::cin >> input;
+
+		switch(input)
+		{
+			case '1':
+				runSample();
+				break;
+
+			case '2':
+				runCustom();
+				break;
+
+			case 'q':
+				std::cout << "Quitting..." << std::endl;
+				break;
+
+			default:
+				std::cout << input << " is not a recognized command." <<
+					std::endl;
+				break;
+		}
+	}while(input != 'q');
+
+	return 0;
+}
+
+void issueTicket(ParkedCar *car, ParkingMeter *meter, PoliceOfficer *officer)
+{
+	if(!officer->examineParking(*car, *meter))
+	{
+		std::cout << "Ticket Issued" << std::endl;
+		ParkingTicket ticket = officer->issueTicket(car, meter);
+		ticket.display();
+	}
+	else
+	{
+		std::cout << "No Ticket Issued" <<std::endl;
+	}
+}
+
+void runSample()
+{
 	std::cout << "Officer Jones spots a white Honda Accord at a parking" <<
 		" meter flashing the words 'Time Expired'. Checking his notes, he" <<
-		" see the car has been parked for 130 minutes. The policeman takes" <<
+		" sees the car has been parked for 130 minutes. The policeman takes" <<
 		" out his notebook and pen.\n" << std::endl; 
 
 	ParkedCar car1("Honda", "Accord", "White", "8LHS035", 130);
@@ -196,20 +249,43 @@ int main()
 	PoliceOfficer officer2("Martin", 4201);
 
 	issueTicket(&car2, &meter2, &officer2);
-
-	return 0;
 }
 
-void issueTicket(ParkedCar *car, ParkingMeter *meter, PoliceOfficer *officer)
+void runCustom()
 {
-	if(!officer->examineParking(*car, *meter))
-	{
-		std::cout << "Ticket Issued" << std::endl;
-		ParkingTicket ticket = officer->issueTicket(car, meter);
-		ticket.display();
-	}
-	else
-	{
-		std::cout << "No Ticket Issued" <<std::endl;
-	}
+	std::string make;
+	std::string model;
+	std::string color;
+	std::string plate;
+	int minutesParked;
+
+	int minutesPaid;
+
+	std::string name;
+	int badge;
+
+	std::cout << "Car's Make: ";
+	std::cin >> make;
+	std::cout << "Car's Model: ";
+	std::cin >> model;
+	std::cout << "Car's Color: ";
+	std::cin >> color;
+	std::cout << "Plate Number: ";
+	std::cin >> plate;
+	std::cout << "Minutes Parked: ";
+	std::cin >> minutesParked;
+
+	std::cout << "Minutes Paid For: ";
+	std::cin >> minutesPaid;
+
+	std::cout << "Officer's Name: ";
+	std::cin >> name;
+	std::cout << "Badge Number: ";
+	std::cin >> badge;
+
+	ParkedCar car(make, model, color, plate, minutesParked);
+	ParkingMeter meter(minutesPaid);
+	PoliceOfficer officer(name, badge);
+
+	issueTicket(&car, &meter, &officer);
 }
