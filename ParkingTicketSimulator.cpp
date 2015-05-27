@@ -6,10 +6,12 @@
 #include <iostream>
 #include <string>
 
+// Class to simulate a park car. Stores all the information needed
 class ParkedCar
 {
 public:
 
+	// Constructor
 	ParkedCar(std::string make, std::string model, std::string color,
 		std::string licensePlate, int minutesParked)
 	{
@@ -20,26 +22,31 @@ public:
 		minutesParked_ = minutesParked;
 	}
 
+	// Returns make
 	std::string getMake()
 	{
 		return make_;
 	}
 
+	// Returns model
 	std::string getModel()
 	{
 		return model_;
 	}
 
+	// Returns color
 	std::string getColor()
 	{
 		return color_;
 	}
 
+	// Returns license plate
 	std::string getLicensePlate()
 	{
 		return licensePlate_;
 	}
 
+	// Returns minutes parked
 	int getMinutesParked()
 	{
 		return minutesParked_;
@@ -47,6 +54,7 @@ public:
 
 private:
 
+	// Private stored variables
 	std::string make_;
 	std::string model_;
 	std::string color_;
@@ -54,16 +62,18 @@ private:
 	int minutesParked_;
 };
 
-
+// Class simulates a parking meter and stores minutes paid for
 class ParkingMeter
 {
 public:
 
+	// Constructor
 	ParkingMeter(int parkingTime)
 	{
 		parkingTime_ = parkingTime;
 	}
 
+	// Returns time paid for
 	int getParkingTime()
 	{
 		return parkingTime_;
@@ -71,13 +81,17 @@ public:
 
 private:
 
+	// Private stored variable
 	int parkingTime_;
 };
 
+// Simulates a parking ticket. Stores information on car, meter and officer.
+// Has a method that prints the ticket.
 class ParkingTicket
 {
 public:
 
+	// Constructor takes pointers to car, meter, and officer objects
 	ParkingTicket(ParkedCar *car, ParkingMeter *meter,
 		std::string officerName, int officerBadgeNumber)
 	{
@@ -102,6 +116,7 @@ public:
 		charge_ = 25 + 10 * hours;
 	}
 
+	// Prints the ticket out in a human-readable format
 	void display()
 	{
 		std::cout << "\nCAR" << std::endl;
@@ -123,6 +138,7 @@ public:
 
 private:
 
+	// Private stored variables
 	std::string make_;
 	std::string model_;
 	std::string color_;
@@ -134,10 +150,12 @@ private:
 	int charge_;
 };
 
+// Simulates a police officer. Stores name and badge number.
 class PoliceOfficer
 {
 public:
 
+	// Constructor
 	PoliceOfficer(std::string name, int badgeNumber)
 	{
 		name_ = name;
@@ -157,6 +175,7 @@ public:
 		}
 	}
 
+	// Writes a parking ticket and returns it
 	ParkingTicket issueTicket(ParkedCar *car, ParkingMeter *meter)
 	{
 		ParkingTicket ticket(car, meter, name_, badgeNumber_);
@@ -165,20 +184,25 @@ public:
 
 private:
 
+	// Private stored variables
 	std::string name_;
 	int badgeNumber_;
 };
 
+// Function prototypes
 void issueTicket(ParkedCar *car, ParkingMeter *meter, PoliceOfficer *officer);
 void runSample();
 void runCustom();
 
+// Main menu logic
 int main()
 {
+	// Input variable
 	char input;
 
 	std::cout << "Welcome to Parking Ticket Simulator.\n" << std::endl;
 	
+	// Menu loop
 	do
 	{
 		std::cout << "[1] Sample\n" << "[2] Custom\n" << "[q] Quit" <<
@@ -188,18 +212,23 @@ int main()
 
 		switch(input)
 		{
+			// Prints out a premade example of the program in action
 			case '1':
 				runSample();
 				break;
 
+			// Allows the user to enter their own variables and
+			// view the results.
 			case '2':
 				runCustom();
 				break;
 
+			// Quits the program
 			case 'q':
 				std::cout << "Quitting..." << std::endl;
 				break;
 
+			// Catches unrecognized inputs
 			default:
 				std::cout << input << " is not a recognized command." <<
 					std::endl;
@@ -210,8 +239,11 @@ int main()
 	return 0;
 }
 
+// Logic for issuing a ticket. If the car is parked illegaly it runs the 
+// ticket.display() function. Otherwise it prints 'no ticket issued'.
 void issueTicket(ParkedCar *car, ParkingMeter *meter, PoliceOfficer *officer)
 {
+	// Checking if a ticket needs to  be written
 	if(!officer->examineParking(*car, *meter))
 	{
 		std::cout << "Ticket Issued" << std::endl;
@@ -224,6 +256,7 @@ void issueTicket(ParkedCar *car, ParkingMeter *meter, PoliceOfficer *officer)
 	}
 }
 
+// Prints a premade example of the program in action
 void runSample()
 {
 	std::cout << "Officer Jones spots a white Honda Accord at a parking" <<
@@ -251,6 +284,7 @@ void runSample()
 	issueTicket(&car2, &meter2, &officer2);
 }
 
+// Asks user for input then writes a ticket if needed
 void runCustom()
 {
 	std::string make;
@@ -283,9 +317,11 @@ void runCustom()
 	std::cout << "Badge Number: ";
 	std::cin >> badge;
 
+	// Creating the objects based on user input
 	ParkedCar car(make, model, color, plate, minutesParked);
 	ParkingMeter meter(minutesPaid);
 	PoliceOfficer officer(name, badge);
 
+	// Issueing a ticket if necessary
 	issueTicket(&car, &meter, &officer);
 }
